@@ -98,7 +98,8 @@ def add_artworks(listitem, artworks):
 def get_details(input_uniqueids, handle, settings):
     if not input_uniqueids:
         return False
-    details = get_tmdb_scraper(settings).get_details(input_uniqueids)
+    artwork_original_language = settings.getSettingBool('artwork_original_language')
+    details = get_tmdb_scraper(settings).get_details(input_uniqueids, artwork_original_language)
     if not details:
         return False
     if 'error' in details:
@@ -122,13 +123,17 @@ def get_details(input_uniqueids, handle, settings):
         details = combine_scraped_details_info_and_ratings(details, traktinfo)
 
     if is_fanarttv_configured(settings):
+        original_language = details['_info']['original_language']
+        fanarttv_language = settings.getSettingString('fanarttv_language')
+        if fanarttv_language == 'original':
+            fanarttv_language = original_language
         fanarttv_info = get_fanarttv_artwork(details['uniqueids'],
             settings.getSettingString('fanarttv_clientkey'),
-            settings.getSettingString('fanarttv_language'),
+            fanarttv_language,
             details['_info']['set_tmdbid'])
         details = combine_scraped_details_available_artwork(details,
             fanarttv_info,
-            settings.getSettingString('language'),
+            original_language if artwork_original_language else settings.getSettingString('language'),
             settings)
 
     details = configure_scraped_details(details, settings)

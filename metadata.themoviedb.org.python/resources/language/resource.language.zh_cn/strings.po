@@ -85,6 +85,10 @@ msgctxt "#30014"
 msgid "Enable posters from TMDb"
 msgstr "启用 TMDb 海报"
 
+msgctxt "#30015"
+msgid "Prefer original language for artwork"
+msgstr "优先使用原语言艺术图片"
+
 msgctxt "#30100"
 msgid "Language for Fanart.tv artwork"
 msgstr "Fanart.tv 艺术图片的语言"
@@ -100,6 +104,10 @@ msgstr "启用 Fanart.tv 艺术图片"
 msgctxt "#30103"
 msgid "Prioritize Fanart.TV artworks over preferred language"
 msgstr "优先考虑 Fanart.tv 艺术图片语言而非首选语言"
+
+msgctxt "#30104"
+msgid "Original language"
+msgstr "原语言"
 
 msgctxt "#30999"
 msgid "Fanart.tv"

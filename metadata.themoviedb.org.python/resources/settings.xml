@@ -138,6 +138,11 @@
 						<heading>30013</heading>
 					</control>
 				</setting>
+				<setting id="artwork_original_language" type="boolean" label="30015" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="fetch_posters" type="boolean" label="30014" help="">
 					<level>0</level>
 					<default>true</default>
@@ -305,6 +310,7 @@
 					<default>en</default>
 					<constraints>
 						<options>
+							<option label="30104">original</option>
 							<option>en</option>
 							<option>fr</option>
 							<option>de</option>

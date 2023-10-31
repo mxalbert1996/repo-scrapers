@@ -19,11 +19,11 @@ class TMDBMovieScraper(object):
         return self._urls
 
     def search(self, title, year=None):
-        
+
         def is_best(item):
             return item['title'].lower() == title and (
                 not year or item.get('release_date', '').startswith(year))
-        
+
         search_media_id = _parse_media_id(title)
         if search_media_id:
             if search_media_id['type'] == 'tmdb':
@@ -62,14 +62,14 @@ class TMDBMovieScraper(object):
                 item['backdrop_path'] = urls['preview'] + item['backdrop_path']
         return result
 
-    def get_details(self, uniqueids):
+    def get_details(self, uniqueids, artwork_original_language=False):
         media_id = uniqueids.get('tmdb') or uniqueids.get('imdb')
         details = self._gather_details(media_id)
         if not details:
             return None
         if details.get('error'):
             return details
-        return self._assemble_details(**details)
+        return self._assemble_details(artwork_original_language, **details)
 
     def _gather_details(self, media_id):
         movie = _get_movie(media_id, self.language)
@@ -90,7 +90,7 @@ class TMDBMovieScraper(object):
         return {'movie': movie, 'movie_fallback': movie_fallback, 'collection': collection,
             'collection_fallback': collection_fallback}
 
-    def _assemble_details(self, movie, movie_fallback, collection, collection_fallback):
+    def _assemble_details(self, artwork_original_language, movie, movie_fallback, collection, collection_fallback):
         info = {
             'title': movie['title'],
             'originaltitle': movie['original_title'],
@@ -132,10 +132,13 @@ class TMDBMovieScraper(object):
             }
             for actor in movie['casts'].get('cast', [])
         ]
-        available_art = _parse_artwork(movie, collection, self.urls, self.language)
+        original_language = movie['original_language'] if artwork_original_language else None
+        available_art = _parse_artwork(movie, collection, self.urls, self.language, original_language)
 
-        _info = {'set_tmdbid': movie['belongs_to_collection'].get('id')
-            if movie['belongs_to_collection'] else None}
+        _info = {
+            'set_tmdbid': movie['belongs_to_collection'].get('id') if movie['belongs_to_collection'] else None,
+            'original_language': movie['original_language']
+        }
 
         return {'info': info, 'ratings': ratings, 'uniqueids': uniqueids, 'cast': cast,
             'available_art': available_art, '_info': _info}
@@ -162,7 +165,7 @@ def _get_moviecollection(collection_id, language=None):
     details = 'images'
     return tmdbapi.get_collection(collection_id, language=language, append_to_response=details)
 
-def _parse_artwork(movie, collection, urlbases, language):
+def _parse_artwork(movie, collection, urlbases, language, original_language=None):
     if language:
         # Image languages don't have regional variants
         language = language.split('-')[0]
@@ -171,29 +174,35 @@ def _parse_artwork(movie, collection, urlbases, language):
     logos = []
     fanart = []
 
+    languages = []
+    if original_language:
+        languages.append(original_language)
+    if language != original_language:
+        languages.append(language)
+    if 'en' not in languages:
+        languages.append('en')
+
     if 'images' in movie:
-        posters = _get_images_with_fallback(movie['images']['posters'], urlbases, language)
-        landscape = _get_images_with_fallback(movie['images']['backdrops'], urlbases, language)
-        logos = _get_images_with_fallback(movie['images']['logos'], urlbases, language)
+        posters = _get_images_with_fallback(movie['images']['posters'], urlbases, languages)
+        landscape = _get_images_with_fallback(movie['images']['backdrops'], urlbases, languages)
+        logos = _get_images_with_fallback(movie['images']['logos'], urlbases, languages)
         fanart = _get_images(movie['images']['backdrops'], urlbases, None)
 
     setposters = []
     setlandscape = []
     setfanart = []
     if collection and 'images' in collection:
-        setposters = _get_images_with_fallback(collection['images']['posters'], urlbases, language)
-        setlandscape = _get_images_with_fallback(collection['images']['backdrops'], urlbases, language)
+        setposters = _get_images_with_fallback(collection['images']['posters'], urlbases, languages)
+        setlandscape = _get_images_with_fallback(collection['images']['backdrops'], urlbases, languages)
         setfanart = _get_images(collection['images']['backdrops'], urlbases, None)
 
     return {'poster': posters, 'landscape': landscape, 'fanart': fanart,
         'set.poster': setposters, 'set.landscape': setlandscape, 'set.fanart': setfanart, 'clearlogo': logos}
 
-def _get_images_with_fallback(imagelist, urlbases, language, language_fallback='en'):
-    images = _get_images(imagelist, urlbases, language)
-
-    # Add backup images
-    if language != language_fallback:
-        images.extend(_get_images(imagelist, urlbases, language_fallback))
+def _get_images_with_fallback(imagelist, urlbases, languages):
+    images = []
+    for language in languages:
+        images.extend(_get_images(imagelist, urlbases, language))
 
     # Add any images if nothing set so far
     if not images:

@@ -84,6 +84,10 @@ msgctxt "#30014"
 msgid "Enable posters from TMDb"
 msgstr ""
 
+msgctxt "#30015"
+msgid "Prefer original language for artwork"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Language for Fanart.tv artwork"
 msgstr ""
@@ -98,6 +102,10 @@ msgstr ""
 
 msgctxt "#30103"
 msgid "Prioritize Fanart.TV artworks over preferred language"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Original language"
 msgstr ""
 
 msgctxt "#30999"
