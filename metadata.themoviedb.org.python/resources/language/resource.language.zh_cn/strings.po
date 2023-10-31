@@ -75,7 +75,7 @@ msgstr "关键字添加为标签"
 
 msgctxt "#30012"
 msgid "Separate TMDb fanart with title to landscape"
-msgstr "将含片名的 TMDb 同人画归入场景贴画"
+msgstr "不将含片名的 TMDb 同人画归入场景贴画"
 
 msgctxt "#30013"
 msgid "Search language"
@@ -83,7 +83,7 @@ msgstr "搜索语言"
 
 msgctxt "#30014"
 msgid "Enable posters from TMDb"
-msgstr ""
+msgstr "启用 TMDb 海报"
 
 msgctxt "#30100"
 msgid "Language for Fanart.tv artwork"
