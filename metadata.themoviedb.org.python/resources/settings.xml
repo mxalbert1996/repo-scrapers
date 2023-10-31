@@ -310,7 +310,7 @@
 					<default>en</default>
 					<constraints>
 						<options>
-							<option label="30104">original</option>
+							<option>Original</option>
 							<option>en</option>
 							<option>fr</option>
 							<option>de</option>

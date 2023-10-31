@@ -125,7 +125,7 @@ def get_details(input_uniqueids, handle, settings):
     if is_fanarttv_configured(settings):
         original_language = details['_info']['original_language']
         fanarttv_language = settings.getSettingString('fanarttv_language')
-        if fanarttv_language == 'original':
+        if fanarttv_language == 'Original':
             fanarttv_language = original_language
         fanarttv_info = get_fanarttv_artwork(details['uniqueids'],
             settings.getSettingString('fanarttv_clientkey'),

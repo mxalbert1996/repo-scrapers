@@ -36,12 +36,12 @@ def combine_scraped_details_available_artwork(original_details, additional_detai
         if not original_details.get('available_art'):
             original_details['available_art'] = {}
         for arttype, artlist in available_art.items():
-            artlist = sorted(artlist, key=lambda x:x['lang']==language, reverse=True)
-            combinlist = artlist + original_details['available_art'].get(arttype, [])
-            original_details['available_art'][arttype] = combinlist
-
-            if not settings.getSettingBool('prioritize_fanarttv_artwork'):
-                original_details['available_art'][arttype] = sorted(combinlist, key=lambda x:x['lang']==language, reverse=True)
+            artlist = sorted(artlist, key=lambda x: x['lang'] == language, reverse=True)
+            original = original_details['available_art'].get(arttype, [])
+            if settings.getSettingBool('prioritize_fanarttv_artwork'):
+                original_details['available_art'][arttype] = artlist + original
+            else:
+                original_details['available_art'][arttype] = original + artlist
 
     return original_details
 

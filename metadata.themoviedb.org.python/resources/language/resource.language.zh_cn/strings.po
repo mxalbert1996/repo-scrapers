@@ -102,12 +102,8 @@ msgid "Enable artwork from Fanart.tv"
 msgstr "启用 Fanart.tv 艺术图片"
 
 msgctxt "#30103"
-msgid "Prioritize Fanart.TV artworks over preferred language"
-msgstr "优先考虑 Fanart.tv 艺术图片语言而非首选语言"
-
-msgctxt "#30104"
-msgid "Original language"
-msgstr "原语言"
+msgid "Prioritize Fanart.TV artwork"
+msgstr "优先使用 Fanart.tv 艺术图片"
 
 msgctxt "#30999"
 msgid "Fanart.tv"
